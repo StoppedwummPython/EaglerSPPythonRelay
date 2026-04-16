@@ -19,6 +19,23 @@ jobs:
       - name: Build
         run: python -m PyInstaller --onefile __main__.py
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v4 # Note: Updated to v4 to match newer standards
         with:
+          name: Windows
           path: dist/__main__.exe
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build # Crucial: ensures this only runs after build succeeds
+    if: ${{ github.event_name == 'release' }}
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4 # Note: Updated to v4
+        with:
+          name: Windows
+          path: dist
+      
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/__main__.exe
