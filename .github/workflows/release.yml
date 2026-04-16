@@ -16,3 +16,7 @@ jobs:
         run: pip install pyinstaller
       - name: Build
         run: python -m PyInstaller --onefile __main__.py
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          path: dist/__main__.exe
